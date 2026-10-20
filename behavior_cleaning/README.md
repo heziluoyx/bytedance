@@ -1,53 +1,3 @@
-# 用户行为 CSV 数据清洗
-
-适用 Python 3.10+。根据项目第一阶段的数据加载、清洗、质量校验、Parquet
-格式转换和三个维度基础聚合任务实现。代码采用 4 空格缩进、88 字符行宽、
-绝对导入、类型注解、Google 风格公共接口文档、日志及独立测试。
-
-## 安装与运行
-
-### 当前电脑的免安装启动方式
-
-如果安装项目包时出现 `Cannot set --home and --prefix together`，可以直接执行：
-
-```powershell
-python 'D:\字节\behavior_cleaning\run_cleaning.py'
-```
-
-启动脚本自动加载源码和已有的 `.runtime` 本地依赖，不需要执行 `pip install -e`。
-它接受与下述模块命令相同的参数。迁移到其他电脑时，如果缺少依赖，先执行
-`python -m pip install -r requirements.txt`；本地 `.runtime` 不包含在源码压缩包内。
-
-### 标准安装方式
-
-在 PowerShell 中执行：
-
-```powershell
-Set-Location 'D:\字节\behavior_cleaning'
-python -m pip install -e '.[dev]'
-python -m behavior_cleaning
-```
-
-默认读取 `D:\字节\user_behavior.csv` 目录内的 CSV，自动忽略 `__MACOSX`
-和 `._` 开头的文件。支持单文件或目录；目录内 CSV 必须都是同类行为数据。
-按文件路径排序后依次处理，以保证保留第一条的结果可重现。
-
-显式指定文件、分块行数及并行线程数：
-
-```powershell
-python -m behavior_cleaning --input 'D:\字节\user_behavior.csv\user_behavior.csv' --chunk-size 100000 --workers 2
-```
-
-仅在业务已经确认采样窗口时指定时间范围，例如：
-
-```powershell
-python -m behavior_cleaning --start '2025-11-18 00' --end '2025-12-18 23'
-```
-
-这个日期范围只是当前样本所见范围的示例，代码默认不把样本范围当成业务规则。
-编码默认 `utf-8-sig`，其他编码通过 `--encoding gb18030` 等显式指定。
-内存紧张时用 `--chunk-size 30000 --workers 1`。
-
 ## 清洗规则
 
 | 原始字段 | 标准字段 | 校验和存储方式 |
@@ -108,12 +58,6 @@ python -m behavior_cleaning --start '2025-11-18 00' --end '2025-12-18 23'
 唯一性由数据库主键约束保障；必要字段有效性由写入前校验保障。
 CSV 语法损坏时停止，不使用 `on_bad_lines="skip"` 静默丢行。
 
-输入使用 Pandas 分块读取和有限队列并行校验，写入数据库顺序固定。
-不需要为当前单机文件额外引入 Dask。SQLite 精确去重和 DISTINCT 聚合会使用磁盘，
-它们适用于当前约 492 MB 文件，但并非分布式亿级性能承诺。
-保留完整重复审计意味着工作空间应容纳数据库、临时排序及导出文件；
-磁盘占用会大于原始文件，运行时间取决于硬盘性能和重复率。
-执行过程中不要修改输入文件，以保证报告哈希与内容一致。
 
 ## 测试及代码检查
 
