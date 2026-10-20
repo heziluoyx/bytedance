@@ -1,8 +1,3 @@
-"""免安装项目包的启动入口：python run_cleaning.py。
-
-将项目 src 目录加入本次进程的导入路径，不修改系统环境变量。
-若存在项目本地依赖 .runtime，也将其加入导入路径。
-"""
 
 import sys
 from pathlib import Path
