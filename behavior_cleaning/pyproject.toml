@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "behavior-cleaning"
+version = "1.0.0"
+requires-python = ">=3.10"
+dependencies = ["pandas>=2.0,<3.0", "numpy>=1.24,<3.0", "pyarrow>=14,<26"]
+
+[project.optional-dependencies]
+dev = ["black", "isort", "pytest", "mypy", "pandas-stubs", "flake8", "pylint"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
