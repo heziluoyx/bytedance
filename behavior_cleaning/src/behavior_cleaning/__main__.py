@@ -21,19 +21,29 @@ def main() -> None:
     parser.add_argument("--encoding", default="utf-8-sig")
     parser.add_argument("--start", help="包含端点，YYYY-MM-DD HH")
     parser.add_argument("--end", help="包含端点，YYYY-MM-DD HH")
+    parser.add_argument(
+        "--repeat-policy",
+        choices=["burst", "legacy"],
+        default="burst",
+        help="默认 burst 保留正常重复；legacy 为旧版四元组全量去重",
+    )
     arguments = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
-    output = run_pipeline(
-        Config(
-            input_path=arguments.input,
-            output_root=arguments.output,
-            chunk_size=arguments.chunk_size,
-            workers=arguments.workers,
-            encoding=arguments.encoding,
-            start=arguments.start,
-            end=arguments.end,
-        )
+    config = Config(
+        input_path=arguments.input,
+        output_root=arguments.output,
+        chunk_size=arguments.chunk_size,
+        workers=arguments.workers,
+        encoding=arguments.encoding,
+        start=arguments.start,
+        end=arguments.end,
     )
+    if arguments.repeat_policy == "burst":
+        from behavior_cleaning.burst_pipeline import run_burst_pipeline
+
+        output = run_burst_pipeline(config)
+    else:
+        output = run_pipeline(config)
     print(f"清洗完成，输出目录：{output}")
 
 

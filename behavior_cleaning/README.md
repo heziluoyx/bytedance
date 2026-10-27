@@ -1,4 +1,40 @@
-## 清洗规则
+# 用户行为数据清洗与 SQLite 建库
+
+当前默认使用新版清洗：保留正常重复，只压缩统计异常小时内的重复冗余。四元组不再要求全局唯一。
+旧版全量四元组去重可通过 `--repeat-policy legacy` 显式复现。
+
+## 运行
+
+在仓库根目录中逐条执行，命令末尾不添加反斜杠：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements.txt
+python behavior_cleaning/run_cleaning.py --input "D:\字节\user_behavior.csv\user_behavior.csv" --repeat-policy burst
+python behavior_cleaning/scripts/build_database.py
+```
+
+请把 --input 替换成自己的数据路径。建库脚本默认查找本地最近一次带 SUCCESS 的清洗结果。
+新版数据库默认保存在 `outputs/sql_analysis_v2/user_behavior.sqlite`，已有文件禁止覆盖。
+SQLite 排序临时目录放在项目 `outputs/sqlite_temp`，只影响当前进程，避免占满系统临时盘。
+
+## 当前成果与说明
+
+- [重复规则、诊断依据与新旧数据对比](docs/repeat_policy_v2.md)
+- [新版 SQLite 第 1—5 步与全量验收](docs/sql_setup_v2.md)
+- [旧版 SQLite 建库说明](docs/sql_setup.md)
+- 正常重复保留；每小时 100 次不是硬编码删除阈值。
+- 本次数据自适应候选阈值为大于 206 次/用户小时，仍需个人基线或重复强度证据。
+- 全量清洗隔离 52,576 条异常重复冗余，保留 12,204,330 条记录。
+- 新版 SQLite 保留全部 12,204,330 条记录，完成四表、六索引及完整性核验。
+- 当前完整测试 30 项通过，导入排序及 Black 格式检查通过。
+- 第六步基础业务 SQL 分析尚未执行。
+- 原始 CSV、Parquet、数据库、清洗输出和本地依赖不在仓库中。
+
+## 历史版本说明
+
+下面保留原有旧版规则和交付说明，仅适用于 legacy 模式；不作为新版的删除规则。
+
+### 旧版清洗规则
 
 | 原始字段 | 标准字段 | 校验和存储方式 |
 | --- | --- | --- |
@@ -73,3 +109,4 @@ python -m mypy src
 
 本目录包含完整代码和测试。后续特征编码、归一化、未来七天标签和模型训练不在清洗阶段执行，
 避免在全量清洗过程中引入未来信息。源代码和运行说明纳入 Git 版本管理。
+
