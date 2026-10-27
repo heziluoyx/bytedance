@@ -1,4 +1,4 @@
-# 用户行为数据清洗与 SQLite 建库
+# 用户行为数据清洗、SQLite 分析与特征预评估
 
 当前默认使用新版清洗：保留正常重复，只压缩统计异常小时内的重复冗余。四元组不再要求全局唯一。
 旧版全量四元组去重可通过 `--repeat-policy legacy` 显式复现。
@@ -26,9 +26,43 @@ SQLite 排序临时目录放在项目 `outputs/sqlite_temp`，只影响当前进
 - 本次数据自适应候选阈值为大于 206 次/用户小时，仍需个人基线或重复强度证据。
 - 全量清洗隔离 52,576 条异常重复冗余，保留 12,204,330 条记录。
 - 新版 SQLite 保留全部 12,204,330 条记录，完成四表、六索引及完整性核验。
-- 当前完整测试 30 项通过，导入排序及 Black 格式检查通过。
-- 第六步基础业务 SQL 分析尚未执行。
+- 当前完整测试 37 项通过，导入排序及 Black 格式检查通过。
+- 已补充基础业务 SQL 分析、历史特征及中国大陆日历分析。
 - 原始 CSV、Parquet、数据库、清洗输出和本地依赖不在仓库中。
+
+## SQLite 分析、特征与中国大陆日历
+
+以下命令在仓库根目录运行：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements-analysis.txt
+python behavior_cleaning/scripts/analyze_features.py
+python behavior_cleaning/scripts/analyze_features.py --advanced --features-only
+python behavior_cleaning/scripts/analyze_china_calendar.py
+```
+
+若要一次运行描述性分析和历史特征，可使用 `python behavior_cleaning/scripts/analyze_features.py --advanced`。
+两个入口默认读取新版数据库，只读访问源数据，分别创建新的分析输出目录。
+
+| 内容 | 文件 |
+| --- | --- |
+| SQLite 业务查询 | [sql/03_analysis.sql](sql/03_analysis.sql) |
+| 分析与历史特征入口 | [scripts/analyze_features.py](scripts/analyze_features.py) |
+| 中国大陆官方日历分析 | [scripts/analyze_china_calendar.py](scripts/analyze_china_calendar.py) |
+| SQL 指标与预测口径 | [docs/feature_analysis.md](docs/feature_analysis.md) |
+| 日历来源与无假期样本说明 | [docs/china_calendar_analysis.md](docs/china_calendar_analysis.md) |
+| 订单与退款字段要求 | [docs/order_data_requirements.md](docs/order_data_requirements.md) |
+
+当前输出包括行为分布、DAU/滚动 WAU、严格顺序漏斗、用户/商品/类目分析、可识别小时桶序列，以及按历史时点构建的用户特征。预评估对 61 个数值输入进行筛选，保留 30 个；这属于单次时间验证，不能作为最终模型结论。
+
+SVD/共现规则默认仅覆盖训练热门 1,000 个商品，金额缺失时仅计算 RF 代理；商品全期生命周期特征尚未接入历史预测。2025-11-18 至 12-18 没有全国统一放假调休日，假期差异不可估计。正式预测实验还需历史内拟合清洗阈值。
+
+安装分析依赖后，在 `behavior_cleaning` 目录运行测试：
+
+```powershell
+python -m pip install pytest
+python -B -m pytest tests -q --assert=plain
+```
 
 ## 历史版本说明
 
