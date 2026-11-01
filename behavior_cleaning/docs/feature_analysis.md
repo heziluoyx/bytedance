@@ -87,4 +87,6 @@ $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
 python -B -m pytest tests -q --assert=plain
 ```
 
-`-B --assert=plain`用于避免旧版pytest向Anaconda安装目录写断言缓存；当前全部37项测试已通过，其中新增7项覆盖时间边界、小时顺序、编码、端到端已知标签，以及中国大陆日历边界和缺少假期样本的空值处理。
+`-B --assert=plain`用于避免旧版pytest向Anaconda安装目录写断言缓存；当前全部40项测试已通过，其中新增7项覆盖时间边界、小时顺序、编码、端到端已知标签，以及中国大陆日历边界和缺少假期样本的空值处理。
+
+新增购买路径复核说明见 [purchase_path_analysis.md](purchase_path_analysis.md)，新增3项测试验证同小时顺序、完整168小时观察边界及输出保护。最新报告见 [reports](../reports/README.md)。

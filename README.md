@@ -59,7 +59,7 @@ python behavior_cleaning/scripts/build_database.py
 
 ## 验证
 
-当前完整测试 37 项通过，isort 与 Black 检查通过。
+当前完整测试 40 项通过，isort 与 Black 检查通过。
 本地全量输入 12,256,906 行，新版隔离异常冗余 52,576 行，保留 12,204,330 行。
 SQLite 已完成同数量导入、四张基础表及六个索引，外键和 integrity_check 均通过。
 这些结果属于已有本地数据验证，原始数据和数据库不随代码上传。
@@ -67,3 +67,15 @@ SQLite 已完成同数量导入、四张基础表及六个索引，外键和 int
 
 原始时间只有小时精度，统计异常不等于已经证实的机器人行为。
 小时桶间隔不是秒级时间差，正常重复不会被统一删除。
+
+## 最新分析报告与购买路径复核
+
+- [报告目录](behavior_cleaning/reports/README.md)：已按批注更新的三份 Word 报告。
+- [购买路径复核说明](behavior_cleaning/docs/purchase_path_analysis.md)：完整7天观察期、同小时顺序和路径重叠口径。
+- [路径复核入口](behavior_cleaning/scripts/analyze_purchase_paths.py)：仅依赖Python标准库，只读查询本地SQLite。
+
+```powershell
+python behavior_cleaning/scripts/analyze_purchase_paths.py
+```
+
+本地全量复核中，浏览、加购、收藏后的完整7天购买比例分别为1.07%、8.20%、3.30%。这些是行为关联，不是支付订单转化或营销因果提升；汇总依据随报告归档。

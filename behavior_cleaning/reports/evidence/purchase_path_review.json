@@ -1,0 +1,65 @@
+{
+  "start": "2025-11-18 00:00:00",
+  "end": "2025-12-18 23:00:00",
+  "complete7d_anchor_cutoff": "2025-12-11 23:00:00",
+  "unit": "distinct user-item pair",
+  "definition": "Each first observed action anchors its own window; purchase in (anchor, anchor+168h]; same-hour order is unknown.",
+  "paths_overlap": true,
+  "all_period_and_first_purchase": {
+    "all_interaction_pairs": 4686904,
+    "purchased_pairs": 102996,
+    "pv_before_first_buy": 52941,
+    "cart_before_first_buy": 23015,
+    "fav_before_first_buy": 8163,
+    "earliest_pv_same_hour_first_buy": 42403,
+    "earliest_cart_same_hour_first_buy": 36601,
+    "earliest_fav_same_hour_first_buy": 3033,
+    "cart_only_before_first_buy": 20706,
+    "fav_only_before_first_buy": 5854,
+    "both_before_first_buy": 2309,
+    "neither_earlier_before_first_buy": 74127,
+    "observed_browse_without_cart_fav_before_or_same_hour": 10230,
+    "no_earlier_intent_but_same_hour_intent": 36230,
+    "pv_pairs": 4677501,
+    "pv_later_buy_pairs": 54305,
+    "pv_complete7d_pairs": 3567270,
+    "pv_complete7d_buy_pairs": 38094,
+    "cart_pairs": 282429,
+    "cart_later_buy_pairs": 24173,
+    "cart_complete7d_pairs": 215401,
+    "cart_complete7d_buy_pairs": 17667,
+    "fav_pairs": 228240,
+    "fav_later_buy_pairs": 8302,
+    "fav_complete7d_pairs": 176095,
+    "fav_complete7d_buy_pairs": 5804
+  },
+  "paths": [
+    {
+      "start_action": "pv",
+      "pairs": 4677501,
+      "later_buy_pairs": 54305,
+      "window_rate": 0.011609831831142312,
+      "complete_7d_pairs": 3567270,
+      "complete_7d_buy_pairs": 38094,
+      "complete_7d_rate": 0.010678754341555307
+    },
+    {
+      "start_action": "cart",
+      "pairs": 282429,
+      "later_buy_pairs": 24173,
+      "window_rate": 0.08558965262065864,
+      "complete_7d_pairs": 215401,
+      "complete_7d_buy_pairs": 17667,
+      "complete_7d_rate": 0.08201911783139354
+    },
+    {
+      "start_action": "fav",
+      "pairs": 228240,
+      "later_buy_pairs": 8302,
+      "window_rate": 0.03637399228881879,
+      "complete_7d_pairs": 176095,
+      "complete_7d_buy_pairs": 5804,
+      "complete_7d_rate": 0.032959482097731335
+    }
+  ]
+}
