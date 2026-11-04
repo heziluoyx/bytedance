@@ -11,6 +11,24 @@
 - 新版四元组使用普通索引，以 event_id 保留正常重复。
 - 将 SQLite 排序临时目录放到项目数据盘，支持完整导入后的安全续建。
 
+## SQLite 分析与特征预评估
+
+建库后可执行基础 SQL 分析、历史快照特征和未来 7 天购买预评估：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements-analysis.txt
+python behavior_cleaning/scripts/analyze_features.py
+python behavior_cleaning/scripts/analyze_features.py --advanced --features-only
+python behavior_cleaning/scripts/analyze_china_calendar.py
+```
+
+- [SQL 查询合集](behavior_cleaning/sql/03_analysis.sql)：行为分布、日活/滚动周活、严格路径漏斗、生命周期、类目及小时序列。
+- [特征与分析口径](behavior_cleaning/docs/feature_analysis.md)：训练/验证时点、预处理、筛选和结果文件。
+- [中国大陆日历分析](behavior_cleaning/docs/china_calendar_analysis.md)：包含官方来源及调休；当前观察期无假期，不能估计假期差异。
+- [订单数据字段要求](behavior_cleaning/docs/order_data_requirements.md)：真实 RFM、订单与商品复购所需信息。
+
+输出自动保存到本地 `behavior_cleaning/outputs/`。SVD 和关联规则默认仅训练热门 1,000 个商品；无金额字段只计算 RF 代理。时间仅有小时精度，不能还原同小时内的行为先后。
+
 ## 运行
 
 需要 Python 3.10+，在仓库目录逐条执行：
@@ -41,11 +59,40 @@ python behavior_cleaning/scripts/build_database.py
 
 ## 验证
 
-当前完整测试 30 项通过，isort 与 Black 检查通过。
+当前完整测试 40 项通过，isort 与 Black 检查通过。
 本地全量输入 12,256,906 行，新版隔离异常冗余 52,576 行，保留 12,204,330 行。
 SQLite 已完成同数量导入、四张基础表及六个索引，外键和 integrity_check 均通过。
 这些结果属于已有本地数据验证，原始数据和数据库不随代码上传。
-第六步基础业务分析、后续特征工程与模型训练尚未在本次更新中执行。
+新版基础 SQL 分析、历史特征和未来 7 天购买预评估已完成本地运行；完整任务范围及剩余限制见上述分析说明。
 
 原始时间只有小时精度，统计异常不等于已经证实的机器人行为。
 小时桶间隔不是秒级时间差，正常重复不会被统一删除。
+
+## 最新分析报告与购买路径复核
+
+- [报告目录](behavior_cleaning/reports/README.md)：已按批注更新的三份 Word 报告。
+- [购买路径复核说明](behavior_cleaning/docs/purchase_path_analysis.md)：完整7天观察期、同小时顺序和路径重叠口径。
+- [路径复核入口](behavior_cleaning/scripts/analyze_purchase_paths.py)：仅依赖Python标准库，只读查询本地SQLite。
+
+```powershell
+python behavior_cleaning/scripts/analyze_purchase_paths.py
+```
+
+本地全量复核中，浏览、加购、收藏后的完整7天购买比例分别为1.07%、8.20%、3.30%。这些是行为关联，不是支付订单转化或营销因果提升；汇总依据随报告归档。
+
+## 传统机器学习与特征工程实施说明
+
+新增用户商品对未来7天购买预测，包含逻辑回归、XGBoost和LightGBM；对比不处理、SMOTE、欠采样和类别权重，按验证AUC选择方案并进行Optuna调参。较早开发采用分层7:2:1，冻结后分别报告较早留出与双十二跨期压力集。累计历史固定7天，验证和测试不重采样。
+
+在仓库根目录运行：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements-models.txt
+python behavior_cleaning/scripts/review_promotion_models.py --output-dir behavior_cleaning/outputs/traditional_new_run
+```
+
+需要先在本地准备 `behavior_cleaning/outputs/sql_analysis_v2/user_behavior.sqlite`，也可用 `--database` 指定路径。数据库、原始数据、用户样本、预测明细和权重不上传。
+
+设计、结果与边界见[传统模型说明](behavior_cleaning/docs/promotion_review.md)；[特征工程实施说明](behavior_cleaning/reports/项目特征工程实施说明.docx)已归档。本次代码仅包含传统模型，不依赖PyTorch。
+
+独立传统模型发布目录已通过50项自动化测试，并完成不加载PyTorch的小型模拟数据库端到端试运行。模拟数据仅用于功能验证。

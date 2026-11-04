@@ -1,4 +1,4 @@
-# 用户行为数据清洗与 SQLite 建库
+# 用户行为数据清洗、SQLite 分析与特征预评估
 
 当前默认使用新版清洗：保留正常重复，只压缩统计异常小时内的重复冗余。四元组不再要求全局唯一。
 旧版全量四元组去重可通过 `--repeat-policy legacy` 显式复现。
@@ -26,9 +26,43 @@ SQLite 排序临时目录放在项目 `outputs/sqlite_temp`，只影响当前进
 - 本次数据自适应候选阈值为大于 206 次/用户小时，仍需个人基线或重复强度证据。
 - 全量清洗隔离 52,576 条异常重复冗余，保留 12,204,330 条记录。
 - 新版 SQLite 保留全部 12,204,330 条记录，完成四表、六索引及完整性核验。
-- 当前完整测试 30 项通过，导入排序及 Black 格式检查通过。
-- 第六步基础业务 SQL 分析尚未执行。
+- 当前完整测试 40 项通过，导入排序及 Black 格式检查通过。
+- 已补充基础业务 SQL 分析、历史特征及中国大陆日历分析。
 - 原始 CSV、Parquet、数据库、清洗输出和本地依赖不在仓库中。
+
+## SQLite 分析、特征与中国大陆日历
+
+以下命令在仓库根目录运行：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements-analysis.txt
+python behavior_cleaning/scripts/analyze_features.py
+python behavior_cleaning/scripts/analyze_features.py --advanced --features-only
+python behavior_cleaning/scripts/analyze_china_calendar.py
+```
+
+若要一次运行描述性分析和历史特征，可使用 `python behavior_cleaning/scripts/analyze_features.py --advanced`。
+两个入口默认读取新版数据库，只读访问源数据，分别创建新的分析输出目录。
+
+| 内容 | 文件 |
+| --- | --- |
+| SQLite 业务查询 | [sql/03_analysis.sql](sql/03_analysis.sql) |
+| 分析与历史特征入口 | [scripts/analyze_features.py](scripts/analyze_features.py) |
+| 中国大陆官方日历分析 | [scripts/analyze_china_calendar.py](scripts/analyze_china_calendar.py) |
+| SQL 指标与预测口径 | [docs/feature_analysis.md](docs/feature_analysis.md) |
+| 日历来源与无假期样本说明 | [docs/china_calendar_analysis.md](docs/china_calendar_analysis.md) |
+| 订单与退款字段要求 | [docs/order_data_requirements.md](docs/order_data_requirements.md) |
+
+当前输出包括行为分布、DAU/滚动 WAU、严格顺序漏斗、用户/商品/类目分析、可识别小时桶序列，以及按历史时点构建的用户特征。预评估对 61 个数值输入进行筛选，保留 30 个；这属于单次时间验证，不能作为最终模型结论。
+
+SVD/共现规则默认仅覆盖训练热门 1,000 个商品，金额缺失时仅计算 RF 代理；商品全期生命周期特征尚未接入历史预测。2025-11-18 至 12-18 没有全国统一放假调休日，假期差异不可估计。正式预测实验还需历史内拟合清洗阈值。
+
+安装分析依赖后，在 `behavior_cleaning` 目录运行测试：
+
+```powershell
+python -m pip install pytest
+python -B -m pytest tests -q --assert=plain
+```
 
 ## 历史版本说明
 
@@ -110,3 +144,30 @@ python -m mypy src
 本目录包含完整代码和测试。后续特征编码、归一化、未来七天标签和模型训练不在清洗阶段执行，
 避免在全量清洗过程中引入未来信息。源代码和运行说明纳入 Git 版本管理。
 
+
+## 最新报告与多路径复核
+
+最新三份 Word 报告见 [reports/README.md](reports/README.md)，包含按批注修订的特征有效性、探索性分析及核心洞察。
+
+```powershell
+python behavior_cleaning/scripts/analyze_purchase_paths.py
+```
+
+上面的命令在仓库根目录运行。脚本只读访问数据库，输出新的JSON、CSV和SUCCESS。SQL见 `sql/04_purchase_paths.sql`，详细口径与已核验结果见 [购买路径复核](docs/purchase_path_analysis.md)。完整7天购买比例为浏览1.07%、加购8.20%、收藏3.30%，各起点人群可重叠，不能相加或解释为因果提升。测试新增小时顺序、168小时边界及输出保护的3项验证。
+
+## 传统机器学习与特征工程实施说明
+
+新增用户商品对未来7天购买预测，包含逻辑回归、XGBoost和LightGBM；对比不处理、SMOTE、欠采样和类别权重，按验证AUC选择方案并进行Optuna调参。较早开发采用分层7:2:1，冻结后分别报告较早留出与双十二跨期压力集。累计历史固定7天，验证和测试不重采样。
+
+在仓库根目录运行：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements-models.txt
+python behavior_cleaning/scripts/review_promotion_models.py --output-dir behavior_cleaning/outputs/traditional_new_run
+```
+
+需要先在本地准备 `behavior_cleaning/outputs/sql_analysis_v2/user_behavior.sqlite`，也可用 `--database` 指定路径。数据库、原始数据、用户样本、预测明细和权重不上传。
+
+设计、结果与边界见[传统模型说明](docs/promotion_review.md)；[特征工程实施说明](reports/项目特征工程实施说明.docx)已归档。本次代码仅包含传统模型，不依赖PyTorch。
+
+独立传统模型发布目录已通过50项自动化测试，并完成不加载PyTorch的小型模拟数据库端到端试运行。模拟数据仅用于功能验证。
