@@ -79,3 +79,20 @@ python behavior_cleaning/scripts/analyze_purchase_paths.py
 ```
 
 本地全量复核中，浏览、加购、收藏后的完整7天购买比例分别为1.07%、8.20%、3.30%。这些是行为关联，不是支付订单转化或营销因果提升；汇总依据随报告归档。
+
+## 传统机器学习与特征工程实施说明
+
+新增用户商品对未来7天购买预测，包含逻辑回归、XGBoost和LightGBM；对比不处理、SMOTE、欠采样和类别权重，按验证AUC选择方案并进行Optuna调参。较早开发采用分层7:2:1，冻结后分别报告较早留出与双十二跨期压力集。累计历史固定7天，验证和测试不重采样。
+
+在仓库根目录运行：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements-models.txt
+python behavior_cleaning/scripts/review_promotion_models.py --output-dir behavior_cleaning/outputs/traditional_new_run
+```
+
+需要先在本地准备 `behavior_cleaning/outputs/sql_analysis_v2/user_behavior.sqlite`，也可用 `--database` 指定路径。数据库、原始数据、用户样本、预测明细和权重不上传。
+
+设计、结果与边界见[传统模型说明](behavior_cleaning/docs/promotion_review.md)；[特征工程实施说明](behavior_cleaning/reports/项目特征工程实施说明.docx)已归档。本次代码仅包含传统模型，不依赖PyTorch。
+
+独立传统模型发布目录已通过50项自动化测试，并完成不加载PyTorch的小型模拟数据库端到端试运行。模拟数据仅用于功能验证。
