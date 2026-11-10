@@ -1,4 +1,15 @@
-# 用户行为数据清洗与 SQLite 建库
+# 用户行为数据清洗、SQLite 分析与特征预评估
+
+## 1.1.0 完整项目交付
+
+现已封装清洗、特征、训练、批量概率推理与模型包导出，完整90项测试通过。
+
+- [完整项目总报告](reports/抖音商城用户行为分析项目总报告.docx)：42页，含全部分析主题、历史与最新模型实验、融合解释及模拟业务结果。
+- [项目汇报PPT](presentations/抖音商城用户行为分析项目汇报.pptx)与[技术分享PPT](presentations/抖音商城购买概率建模技术分享.pptx)：分别18页和19页，配逐页讲解提纲。
+- [API文档与运行示例](docs/api_reference.md)、[特征拆分Excel](docs/特征拆分整理.xlsx)、[项目复盘](docs/project_retrospective.md)。
+- [全部报告索引](reports/README.md)、[聚合结果与调参清单](reports/results/result_manifest.json)、[版本发布记录](releases/v1.1.0.md)。
+
+安装稳定入口：`python -m pip install -e ./behavior_cleaning`（仓库根目录），建模环境见API文档；随后运行`behavior-toolkit --help`。预测使用真实0/1标签训练，主要输出连续概率。现有实验窗口固定，双十二影响、长尾局限与未实施真实A/B均在报告中说明。
 
 当前默认使用新版清洗：保留正常重复，只压缩统计异常小时内的重复冗余。四元组不再要求全局唯一。
 旧版全量四元组去重可通过 `--repeat-policy legacy` 显式复现。
@@ -26,9 +37,43 @@ SQLite 排序临时目录放在项目 `outputs/sqlite_temp`，只影响当前进
 - 本次数据自适应候选阈值为大于 206 次/用户小时，仍需个人基线或重复强度证据。
 - 全量清洗隔离 52,576 条异常重复冗余，保留 12,204,330 条记录。
 - 新版 SQLite 保留全部 12,204,330 条记录，完成四表、六索引及完整性核验。
-- 当前完整测试 30 项通过，导入排序及 Black 格式检查通过。
-- 第六步基础业务 SQL 分析尚未执行。
+- 当前完整测试 90 项通过，导入排序及 Black 格式检查通过。
+- 已补充基础业务 SQL 分析、历史特征及中国大陆日历分析。
 - 原始 CSV、Parquet、数据库、清洗输出和本地依赖不在仓库中。
+
+## SQLite 分析、特征与中国大陆日历
+
+以下命令在仓库根目录运行：
+
+```powershell
+python -m pip install -r behavior_cleaning/requirements-analysis.txt
+python behavior_cleaning/scripts/analyze_features.py
+python behavior_cleaning/scripts/analyze_features.py --advanced --features-only
+python behavior_cleaning/scripts/analyze_china_calendar.py
+```
+
+若要一次运行描述性分析和历史特征，可使用 `python behavior_cleaning/scripts/analyze_features.py --advanced`。
+两个入口默认读取新版数据库，只读访问源数据，分别创建新的分析输出目录。
+
+| 内容 | 文件 |
+| --- | --- |
+| SQLite 业务查询 | [sql/03_analysis.sql](sql/03_analysis.sql) |
+| 分析与历史特征入口 | [scripts/analyze_features.py](scripts/analyze_features.py) |
+| 中国大陆官方日历分析 | [scripts/analyze_china_calendar.py](scripts/analyze_china_calendar.py) |
+| SQL 指标与预测口径 | [docs/feature_analysis.md](docs/feature_analysis.md) |
+| 日历来源与无假期样本说明 | [docs/china_calendar_analysis.md](docs/china_calendar_analysis.md) |
+| 订单与退款字段要求 | [docs/order_data_requirements.md](docs/order_data_requirements.md) |
+
+当前输出包括行为分布、DAU/滚动 WAU、严格顺序漏斗、用户/商品/类目分析、可识别小时桶序列，以及按历史时点构建的用户特征。预评估对 61 个数值输入进行筛选，保留 30 个；这属于单次时间验证，不能作为最终模型结论。
+
+SVD/共现规则默认仅覆盖训练热门 1,000 个商品，金额缺失时仅计算 RF 代理；商品全期生命周期特征尚未接入历史预测。2025-11-18 至 12-18 没有全国统一放假调休日，假期差异不可估计。正式预测实验还需历史内拟合清洗阈值。
+
+安装分析依赖后，在 `behavior_cleaning` 目录运行测试：
+
+```powershell
+python -m pip install pytest
+python -B -m pytest tests -q --assert=plain
+```
 
 ## 历史版本说明
 
@@ -110,3 +155,37 @@ python -m mypy src
 本目录包含完整代码和测试。后续特征编码、归一化、未来七天标签和模型训练不在清洗阶段执行，
 避免在全量清洗过程中引入未来信息。源代码和运行说明纳入 Git 版本管理。
 
+
+## 最新报告与多路径复核
+
+最新三份 Word 报告见 [reports/README.md](reports/README.md)，包含按批注修订的特征有效性、探索性分析及核心洞察。
+
+```powershell
+python behavior_cleaning/scripts/analyze_purchase_paths.py
+```
+
+上面的命令在仓库根目录运行。脚本只读访问数据库，输出新的JSON、CSV和SUCCESS。SQL见 `sql/04_purchase_paths.sql`，详细口径与已核验结果见 [购买路径复核](docs/purchase_path_analysis.md)。完整7天购买比例为浏览1.07%、加购8.20%、收藏3.30%，各起点人群可重叠，不能相加或解释为因果提升。测试新增小时顺序、168小时边界及输出保护的3项验证。
+
+## 用户商品购买模型训练
+
+新增用户—商品对未来7天标签、分层7:2:1样本、不平衡方案比较、Optuna调优以及LSTM、GRU、DIN、多头注意力扩展。
+
+运行入口：`python behavior_cleaning/scripts/train_purchase_models.py`（仓库根目录）。
+
+详细安装、分阶段运行和适用边界见 [模型训练说明](docs/model_training.md)。训练结果保存在本地 `behavior_cleaning/outputs/purchase_models_...`，不上传用户样本和预测明细。
+
+## 模型融合与业务模拟
+
+运行 `python behavior_cleaning/scripts/analyze_stacking_business.py`（仓库根目录），执行三折OOF融合、逻辑回归系数、XGBoost与DIN的SHAP解释、错误诊断和用户级A/B模拟。详见 [融合与业务模拟说明](docs/stacking_business.md)。本轮融合未超过树模型测试AUC；业务金额为假设情景，并非真实实验收益。项目现有60项测试通过。
+
+## 双十二窗口复核
+
+新增 `python behavior_cleaning/scripts/review_promotion_models.py`，在11月25日较早截点重新调优三种传统模型，冻结后评估12月12日跨期压力样本。两期特征统一固定7天；较早7:2:1留出与后期压力评估分别报告，不把促销期成绩当作常态结论。详见 [重训设计与限制](docs/promotion_review.md)。
+
+## 严格时间窗口的连续购买概率
+
+最新入口为 python behavior_cleaning/scripts/train_temporal_probability.py（仓库根目录）。本轮对七种单模型和时间留出Stacking重新训练，输出用户商品对未来7天购买的0到1连续概率，统一3天历史，按四个不重叠7天标签窗口隔离训练、调参、融合校准和最终测试。说明见 [时间概率预测](docs/temporal_probability.md)。
+
+默认结果为 outputs/temporal_probability_20261109，包含模型、概率校准器、连续概率CSV/Parquet、三份HTML/Markdown报告及解释图表。原实验保留。自然分布漂移、促销影响和源清洗回看限制在新报告中单独说明，不把购买倾向当营销增量。
+
+四份最新Word模型报告已归档在 [reports](reports/README.md)。补充诊断入口为 `python behavior_cleaning/scripts/analyze_probability_diagnostics.py`（仓库根目录），生成用户内排序、十分位Lift、PSI、融合与消融、SHAP依赖及精确交互等结果，见 [诊断说明](docs/probability_diagnostics.md)。

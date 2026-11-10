@@ -4,12 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "behavior-cleaning"
-version = "1.0.0"
+version = "1.1.0"
 requires-python = ">=3.10"
 dependencies = ["pandas>=2.0,<3.0", "numpy>=1.24,<3.0", "pyarrow>=14,<26", "duckdb>=1.4,<2"]
 
 [project.optional-dependencies]
 dev = ["black", "isort", "pytest", "mypy", "pandas-stubs", "flake8", "pylint"]
+modeling = ["scikit-learn>=1.2,<1.4", "imbalanced-learn>=0.10,<0.12", "xgboost>=2.1,<3", "lightgbm>=4.6,<5", "optuna>=4,<5", "torch>=1.12,<3", "matplotlib>=3.7,<4", "scipy>=1.10,<1.12", "joblib>=1.1,<2"]
+
+[project.scripts]
+behavior-toolkit = "behavior_cleaning.toolkit_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

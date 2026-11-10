@@ -1,0 +1,7 @@
+-r requirements-analysis.txt
+xgboost==2.1.4
+lightgbm==4.6.0
+optuna==4.5.0
+imbalanced-learn>=0.10,<0.14
+torch>=1.12,<3
+threadpoolctl>=3.6,<4

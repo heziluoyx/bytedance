@@ -1,0 +1,284 @@
+[
+  {
+    "path": "reports/results/assumed_benefits.csv",
+    "rows": 6,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "c6e450ee6c406c5d7bf7cf3cfd89807bcf606cfa4f606e6670ddfca2ed0aa0db"
+  },
+  {
+    "path": "reports/results/behavior.csv",
+    "rows": 4,
+    "source_run": "analysis_results_20261027",
+    "sha256": "bab8fe0b299b4c67dd5c615c851f3ac4d3bc2bb9193ae60349fd2f200b4fdd04"
+  },
+  {
+    "path": "reports/results/calendar_summary.json",
+    "rows": null,
+    "source_run": "existing_frozen_aggregate_results",
+    "sha256": "a1693460f25632072da05d284e196c2d4a5fdf9a9fd4af01af1ff2296222de61"
+  },
+  {
+    "path": "reports/results/category_analysis.csv",
+    "rows": 8916,
+    "source_run": "existing_frozen_aggregate_results",
+    "sha256": "bbbced1bfdbb21423bc144f9d024d410fde5ef16d2be7e61434e93f13cc3ac58"
+  },
+  {
+    "path": "reports/results/cleaning_summary.json",
+    "rows": null,
+    "source_run": "existing_frozen_aggregate_results",
+    "sha256": "87caeb4dbaa33c7a625165291abebfa335f744c7bb76a4383cf2fae59dc33845"
+  },
+  {
+    "path": "reports/results/daily.csv",
+    "rows": 31,
+    "source_run": "analysis_results_20261027",
+    "sha256": "288669c04451e9e4bba72da58a5784e7eb77cd930ee527033e4b8109bf28690b"
+  },
+  {
+    "path": "reports/results/engineering_validation.json",
+    "rows": null,
+    "source_run": "release_20261110",
+    "sha256": "07b5d68a7bc3dee155b310265f5c0ffe41b7e163bf1b03eda22a83f2c5aabe12"
+  },
+  {
+    "path": "reports/results/feature_preassessment.csv",
+    "rows": 61,
+    "source_run": "feature_results_20261027",
+    "sha256": "b5d5163f0ce4bdcdba84636a41a242f3c2f0f2140a78b7c9bb4fd7e648410c45"
+  },
+  {
+    "path": "reports/results/feature_validation.json",
+    "rows": null,
+    "source_run": "existing_frozen_aggregate_results",
+    "sha256": "7684e02cc3c9acc0cc0f72b77a905f20a1f088c87868cfe964cdea0d58508db0"
+  },
+  {
+    "path": "reports/results/funnel.csv",
+    "rows": 4,
+    "source_run": "analysis_results_20261027",
+    "sha256": "6aa842397dc53d3476f9c8623dfc2155d04a8e2952ddb87cf1951ef88844a050"
+  },
+  {
+    "path": "reports/results/hourly.csv",
+    "rows": 24,
+    "source_run": "analysis_results_20261027",
+    "sha256": "888a456970258f96a131959d08845a6548017f1362e22b0c3c89ed9931134b3e"
+  },
+  {
+    "path": "reports/results/inference_parity.json",
+    "rows": null,
+    "source_run": "release_20261110",
+    "sha256": "a2d2c9c384ae27468a9189cc752c157d285e345632c4bbfe830180375d077c22"
+  },
+  {
+    "path": "reports/results/item_aggregate.json",
+    "rows": null,
+    "source_run": "existing_frozen_aggregate_results",
+    "sha256": "1a3ce292b0ef48a00159b7d0ba2212846005c4178aebff96dcb05c681e9580e0"
+  },
+  {
+    "path": "reports/results/paths.csv",
+    "rows": 3,
+    "source_run": "purchase_path_release_check_20261102",
+    "sha256": "673a7e3093e63da23fded71e6199d357c716650ee915629edee331e48bece054"
+  },
+  {
+    "path": "reports/results/promotion_drift.csv",
+    "rows": 25,
+    "source_run": "promotion_review_20261104",
+    "sha256": "24ef59b6e54b7eb4fb269aabf40fd0ceab81b02c596991d084d260629e88ff9f"
+  },
+  {
+    "path": "reports/results/promotion_imbalance.csv",
+    "rows": 12,
+    "source_run": "promotion_review_20261104",
+    "sha256": "56dd0c60d56e76125bbcbc63bace93b4c0c43c096cc127bad171388b7975ff5e"
+  },
+  {
+    "path": "reports/results/promotion_models.csv",
+    "rows": 6,
+    "source_run": "promotion_review_20261104",
+    "sha256": "e4df36cccd512757c5428c71a1f683a1c41cdc48e984af2318f29b4292483b82"
+  },
+  {
+    "path": "reports/results/promotion_review_20261104_LightGBM_optuna_trials.csv",
+    "rows": 12,
+    "source_run": "promotion_review_20261104",
+    "sha256": "86099e7e4912c3427270f0b1f710f8a5932cb5316f4489ce0465e9bdb647c938"
+  },
+  {
+    "path": "reports/results/promotion_review_20261104_LogisticRegression_optuna_trials.csv",
+    "rows": 12,
+    "source_run": "promotion_review_20261104",
+    "sha256": "19be30249bf93a45f6ae7bd7e4d4a2e709002b8c22e4eb9a402b1467f9af6ba8"
+  },
+  {
+    "path": "reports/results/promotion_review_20261104_XGBoost_optuna_trials.csv",
+    "rows": 12,
+    "source_run": "promotion_review_20261104",
+    "sha256": "6b1b5b34827b81b155dd93b23ac9776f36078f3e7d2a1bc7f020e91a02c0d312"
+  },
+  {
+    "path": "reports/results/purchase_models_20261102_DIN_MHA_optuna_trials.csv",
+    "rows": 2,
+    "source_run": "purchase_models_20261102",
+    "sha256": "e73fa8af43d37744a922ebc51671d40ed42ac685bb476d67fdb14835da3ce05e"
+  },
+  {
+    "path": "reports/results/purchase_models_20261102_DIN_optuna_trials.csv",
+    "rows": 4,
+    "source_run": "purchase_models_20261102",
+    "sha256": "2e550cc98a2554d2cf221fc494e715efa5203eff6286672317818f358905d584"
+  },
+  {
+    "path": "reports/results/purchase_models_20261102_GRU_optuna_trials.csv",
+    "rows": 4,
+    "source_run": "purchase_models_20261102",
+    "sha256": "d524c47b66559f9bb90ad5a43024a4b093dfd4a2ba76996b42f347868ba7b93f"
+  },
+  {
+    "path": "reports/results/purchase_models_20261102_LightGBM_optuna_trials.csv",
+    "rows": 8,
+    "source_run": "purchase_models_20261102",
+    "sha256": "4203cc552afcb92573a9dddc7c260aaf93dccf627fe96452d6161da16083759c"
+  },
+  {
+    "path": "reports/results/purchase_models_20261102_LogisticRegression_optuna_trials.csv",
+    "rows": 8,
+    "source_run": "purchase_models_20261102",
+    "sha256": "4bef9bb84dd552623ee5c63dbadd3328ef1fe28c4cc42f1f50abff942c0dfcc2"
+  },
+  {
+    "path": "reports/results/purchase_models_20261102_LSTM_optuna_trials.csv",
+    "rows": 4,
+    "source_run": "purchase_models_20261102",
+    "sha256": "123fab4473c2f6f05f2c2d812484fa53b03262039cd1bb21d69ca16f4777582d"
+  },
+  {
+    "path": "reports/results/purchase_models_20261102_XGBoost_optuna_trials.csv",
+    "rows": 8,
+    "source_run": "purchase_models_20261102",
+    "sha256": "1d9a13ceeb7f0c368cdbe9930b0c80d2410729528852ad7bfa5651a716353fc9"
+  },
+  {
+    "path": "reports/results/random_budgets.csv",
+    "rows": 20,
+    "source_run": "purchase_followup_20261102",
+    "sha256": "e5ebbffafc3d6c2b575ca92b8ae0d7ff693ad1ea7057aaa5609939b9df534f47"
+  },
+  {
+    "path": "reports/results/random_din_shap.csv",
+    "rows": 6,
+    "source_run": "purchase_followup_20261102",
+    "sha256": "9fd737673eb868443b587472f4faa9af6f0302cd11d6a8ac9b47d6fa6274f5b7"
+  },
+  {
+    "path": "reports/results/random_imbalance.csv",
+    "rows": 12,
+    "source_run": "purchase_models_20261102",
+    "sha256": "9efb395d383c1c0a933313ae2601fa5468ea160526d46d4a255fef3f7c7788a9"
+  },
+  {
+    "path": "reports/results/random_models.csv",
+    "rows": 7,
+    "source_run": "purchase_models_20261102",
+    "sha256": "d3b6a4ad4a04c12908664d07caf8603b9a4d3d60d4c7c985761b95cc2b3f6df2"
+  },
+  {
+    "path": "reports/results/random_stacking.csv",
+    "rows": 8,
+    "source_run": "purchase_followup_20261102",
+    "sha256": "6b6d7673a7f5a0b51125a83f69e8e4222d2142c227b2b4483dc2aeb62df81f3e"
+  },
+  {
+    "path": "reports/results/random_subgroups.csv",
+    "rows": 40,
+    "source_run": "purchase_followup_20261102",
+    "sha256": "95503c88c08f0ef890cd9c8c534e87aa821e56f0d34f71f5354d1783889e8245"
+  },
+  {
+    "path": "reports/results/random_xgb_shap.csv",
+    "rows": 26,
+    "source_run": "purchase_followup_20261102",
+    "sha256": "dba3099415428408c066bd600a12b947827d3b444760cba72eab2c0c4aff12e2"
+  },
+  {
+    "path": "reports/results/rf_groups.csv",
+    "rows": 4,
+    "source_run": "analysis_results_20261027",
+    "sha256": "f14b1e7024ac2a9a291557251a17c5a69efd9fda6a92768900d00629552b3470"
+  },
+  {
+    "path": "reports/results/supplementary_diagnostics.json",
+    "rows": null,
+    "source_run": "existing_frozen_aggregate_results",
+    "sha256": "6669a1456c09a6ebb34ed735c6545416931990cb27d03e04dab1900783cb8a26"
+  },
+  {
+    "path": "reports/results/temporal_budgets.csv",
+    "rows": 32,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "74bcfc579f38cc52dd011f0814c11680756ab5928a9dce5c6fe220c7b7accdaf"
+  },
+  {
+    "path": "reports/results/temporal_din_shap.csv",
+    "rows": 6,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "fe02bd26d31ad1934c232f77b3ecf3912ab0c406023908b588f08628d40fab3e"
+  },
+  {
+    "path": "reports/results/temporal_errors.csv",
+    "rows": 40,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "63ba57c5f6b72e9c4e976b633d119e4417085f737b081e60d469e0c7f1d3d3fc"
+  },
+  {
+    "path": "reports/results/temporal_imbalance.csv",
+    "rows": 12,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "d2de4a7b2952226ebe30ec17f77c3d6a6fc537f33557475a441cb1a5bfb4eec0"
+  },
+  {
+    "path": "reports/results/temporal_models.csv",
+    "rows": 39,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "9846b953c30e2bb7ab52266a284d774f489b794934b400b6e763f56e3ac6fcd7"
+  },
+  {
+    "path": "reports/results/temporal_probability_20261109_LightGBM_optuna_trials.csv",
+    "rows": 12,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "f19cc2265b7887ea570d6f9a3b68a8c26a7049e7bac72bf88bbf51f10853382d"
+  },
+  {
+    "path": "reports/results/temporal_probability_20261109_LogisticRegression_optuna_trials.csv",
+    "rows": 12,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "b20d8d89e4025384ed08696d0ed78607b7a946002657379afe794a56560895f6"
+  },
+  {
+    "path": "reports/results/temporal_probability_20261109_XGBoost_optuna_trials.csv",
+    "rows": 12,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "c8f7425c1d7190a3e9d60415baffc7262a192ff2b30d84dc671c4ffcc60ae300"
+  },
+  {
+    "path": "reports/results/temporal_xgb_shap.csv",
+    "rows": 26,
+    "source_run": "temporal_probability_20261109",
+    "sha256": "c949ccc7d23426adeb6ca557ede4b47b1693e9566e0cb3fc0452986d67fc0582"
+  },
+  {
+    "path": "reports/results/transitions.csv",
+    "rows": 16,
+    "source_run": "analysis_results_20261027",
+    "sha256": "9374239c05eff170afb3e8cae12625117d2d6c34b46f175e4c3c68cd8881d368"
+  },
+  {
+    "path": "reports/results/workdays.csv",
+    "rows": 2,
+    "source_run": "china_calendar_review_20261027",
+    "sha256": "b3b684b5203e78d10dce1eb902d03505f39cb486c2bb7157ace2a61d4a9073e2"
+  }
+]

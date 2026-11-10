@@ -1,0 +1,88 @@
+{
+  "training_cutoff": "2025-12-05 00:00:00",
+  "validation_cutoff": "2025-12-12 00:00:00",
+  "data_finish_exclusive": "2025-12-19 00:00:00",
+  "excluded_users_without_both_histories": [
+    0,
+    179
+  ],
+  "implicit_features": {
+    "vocabulary_size": 1000,
+    "max_items": 1000,
+    "components": 16,
+    "coverage": [
+      {
+        "cutoff": "2025-12-05 00:00:00",
+        "covered_users": 7722,
+        "user_count": 9725,
+        "covered_pairs": 54280,
+        "covered_pair_share": 0.021648768277614742,
+        "covered_business_weight_share": 0.022172139117407275
+      },
+      {
+        "cutoff": "2025-12-12 00:00:00",
+        "covered_users": 8238,
+        "user_count": 9725,
+        "covered_pairs": 68342,
+        "covered_pair_share": 0.019165110984170036,
+        "covered_business_weight_share": 0.019975588379386372
+      }
+    ],
+    "min_cooccurrence_users": 5,
+    "rules": 17774,
+    "scope": "training_popular_item_subset_not_full_catalog"
+  },
+  "preassessment": {
+    "input_features": 61,
+    "selected_features": [
+      "rf_proxy_score",
+      "buy_count",
+      "purchase_recency_days",
+      "observed_hour_bins",
+      "active_days",
+      "mean_distinct_hour_gap",
+      "funnel_cart_pairs",
+      "events",
+      "cart_count",
+      "longest_active_streak",
+      "activity_level_code",
+      "inactivity_days",
+      "max_distinct_hour_gap",
+      "funnel_pv_to_cart",
+      "identifiable_pairs",
+      "svd_0",
+      "svd_13",
+      "fav_count",
+      "observed_item_affinity_mean",
+      "svd_5",
+      "transition_1_1",
+      "svd_8",
+      "longest_identifiable_behavior_run",
+      "svd_2",
+      "svd_11",
+      "svd_10",
+      "svd_6",
+      "svd_9",
+      "svd_3",
+      "svd_4"
+    ],
+    "train_users": 9725,
+    "validation_users": 9725,
+    "train_positive_rate": 0.5452956298200514,
+    "validation_positive_rate": 0.6651928020565553,
+    "validation_roc_auc": 0.7618343655984714,
+    "validation_average_precision": 0.8587557311105545,
+    "validation_brier": 0.18287185334073386,
+    "scope": "single_temporal_holdout_seen_users_exploratory_not_final_model"
+  },
+  "limitations": [
+    "RFM金额维度缺失，仅RF代理；全量商品隐式特征未完成。",
+    "隐式特征和关联规则仅训练热门商品子集，阈值5名共现用户。",
+    "共现基于用户是否交互，规则为集合关联而非时间因果。",
+    "SVD、编码、缩放及筛选只拟合训练历史；验证标签只用于评估。",
+    "同小时行为序列不可识别，仅统计相邻单一类型小时桶转移。",
+    "历史长度随快照增加，不同截点的累计特征受观察窗长度影响。",
+    "仅一次时间验证且用户重叠，不能用于宣称新用户泛化能力。",
+    "清洗异常阈值曾由全期数据拟合，预测评估仍有预处理回看局限。"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": "1.1.0",
+  "date": "2026-11-10",
+  "unit_tests": 90,
+  "unit_test_status": "passed",
+  "real_history_replay_rows": 2000,
+  "real_history_replay_models": 8,
+  "maximum_probability_error": 0.0,
+  "bundle_reload_parity": true,
+  "training_api_smoke": "passed",
+  "smoke_budget": {
+    "max_pairs": 2000,
+    "trials": 1,
+    "epochs": 1,
+    "deep_configurations": 1
+  },
+  "smoke_is_formal_model_experiment": false,
+  "note": "本地CPU验证；依赖只读目录导致沙箱路径检查失败时在获授权的本地环境复核。",
+  "wheel_build": "passed",
+  "isolated_wheel_install": "passed",
+  "console_entry_version": "1.1.0",
+  "report_pages": 42,
+  "presentation_slides": {
+    "project": 18,
+    "technical": 19
+  },
+  "unit_test_elapsed_seconds": 41.64
+}

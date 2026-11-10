@@ -1,0 +1,81 @@
+{
+  "rows": {
+    "input": 12256906,
+    "invalid": 0,
+    "clean": 12204330,
+    "removed_anomaly_redundancies": 52576,
+    "retained_ratio": 0.9957104998602421,
+    "observed_duplicate_excess": 6043527,
+    "remaining_duplicate_excess": 5990951
+  },
+  "behavior_counts": {
+    "1": 11498327,
+    "2": 242424,
+    "3": 343437,
+    "4": 120142
+  },
+  "time_min": "2025-11-18T00:00:00",
+  "time_max": "2025-12-18T23:00:00",
+  "burst_rules": {
+    "parameters": {
+      "hour_quantile": 0.999,
+      "repeat_quantile": 0.999,
+      "min_baseline_hours": 12,
+      "personal_multiplier": 3.0,
+      "mad_multiplier": 6.0
+    },
+    "hour_limit": 206,
+    "repeat_limit": 12,
+    "global_formula": "ceil(max(Pq, Q3 + 3 * IQR))",
+    "personal_formula": "max(3 * median, median + 6 * 1.4826 * MAD) with default parameters",
+    "decision": "hour_count > global_limit AND (personal_burst OR repetition_extreme)",
+    "action": "only_remove_redundancies_in_flagged_hours_keep_one_per_quadruple",
+    "time_resolution": "calendar_hour_bins_not_rolling_60_minutes",
+    "certainty": "statistical_candidate_not_verified_bot_or_fraud"
+  },
+  "hour_decisions": {
+    "high_volume_candidates": 676,
+    "flagged_hours": 417,
+    "flagged_users": 268
+  },
+  "threshold_sensitivity": [
+    {
+      "reference_threshold": 100,
+      "candidate_hours": 11474,
+      "raw_rows_in_candidates": 1579253,
+      "repeat_excess_in_candidates": 781848
+    },
+    {
+      "reference_threshold": 118,
+      "candidate_hours": 6801,
+      "raw_rows_in_candidates": 1071473,
+      "repeat_excess_in_candidates": 531978
+    },
+    {
+      "reference_threshold": 144,
+      "candidate_hours": 3366,
+      "raw_rows_in_candidates": 625389,
+      "repeat_excess_in_candidates": 311086
+    },
+    {
+      "reference_threshold": 206,
+      "candidate_hours": 676,
+      "raw_rows_in_candidates": 176571,
+      "repeat_excess_in_candidates": 89059
+    },
+    {
+      "reference_threshold": 341,
+      "candidate_hours": 67,
+      "raw_rows_in_candidates": 28324,
+      "repeat_excess_in_candidates": 14978
+    }
+  ],
+  "validation": {
+    "row_balance": true,
+    "parquet_rows_match": true,
+    "aggregate_totals_match": true,
+    "all_distinct_operations_preserved": true,
+    "removed_only_from_flagged_hours": true,
+    "category_consistency": true
+  }
+}

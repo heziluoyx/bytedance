@@ -1,0 +1,15 @@
+# Python 3.10; existing CPU experiment versions, not a latest-version recommendation.
+numpy==1.26.4
+pandas==2.0.3
+scikit-learn==1.2.1
+imbalanced-learn==0.10.1
+xgboost==2.1.4
+lightgbm==4.6.0
+optuna==4.5.0
+torch==1.12.1
+duckdb==1.5.6
+pyarrow==25.0.1
+matplotlib==3.7.0
+scipy==1.10.1
+joblib==1.1.1
+pytest==7.1.2

@@ -1,0 +1,5 @@
+number,value,datetime_start,datetime_complete,duration,params_dropout,params_embedding,params_hidden,params_learning_rate,system_attrs_fixed_params,state
+0,,2026-11-02 18:53:03.693019,2026-11-02 18:59:45.015339,0 days 00:06:41.322320,0.2,16,32,0.001,"{'embedding': 16, 'hidden': 32, 'dropout': 0.2, 'learning_rate': 0.001, 'heads': 2}",FAIL
+1,,2026-11-02 18:56:21.553786,2026-11-02 18:59:45.047041,0 days 00:03:23.493255,0.2,16,32,0.001,"{'embedding': 16, 'hidden': 32, 'dropout': 0.2, 'learning_rate': 0.001, 'heads': 2}",FAIL
+2,0.9334784461474983,2026-11-02 18:59:45.093308,2026-11-02 19:09:44.165059,0 days 00:09:59.071751,0.2,16,32,0.001,"{'embedding': 16, 'hidden': 32, 'dropout': 0.2, 'learning_rate': 0.001, 'heads': 2}",COMPLETE
+3,0.9314216140531254,2026-11-02 19:09:44.185697,2026-11-02 19:20:52.320340,0 days 00:11:08.134643,0.14680559213273098,16,32,0.0006612372870684138,,COMPLETE

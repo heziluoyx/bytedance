@@ -1,0 +1,73 @@
+[
+  {
+    "path": "reports/传统机器学习模型性能评估报告.docx",
+    "bytes": 45986,
+    "sha256": "7ee79d0ad2fdd04144683378437a8a412820a4aad0a1f95d18ca58b5d51af151"
+  },
+  {
+    "path": "reports/单模型性能评估报告.docx",
+    "bytes": 661528,
+    "sha256": "34cef3bd8bfc5bea079a176ed3fa5a2f9e88a045457d206584e6ebf2e36ff871"
+  },
+  {
+    "path": "reports/抖音商城用户行为分析项目总报告.docx",
+    "bytes": 2094827,
+    "sha256": "5a3ebaeffce56800744ed8b7f608352928c161dbf4e55a9bd9af2385de1139e3"
+  },
+  {
+    "path": "reports/探索性数据分析报告.docx",
+    "bytes": 1118944,
+    "sha256": "afc6ba260286e4b1a52c7352cdbb97b3db985debdc15b11639631d7ef5bcf026"
+  },
+  {
+    "path": "reports/核心数据洞察总结.docx",
+    "bytes": 44248,
+    "sha256": "d2b87ea279d3ccd7427d01dd2074585ba0dd0c462b2f2b7c4c66739895f332c1"
+  },
+  {
+    "path": "reports/模型可解释性分析报告.docx",
+    "bytes": 691457,
+    "sha256": "7930cb919f40bc2fbc5fdd9387e338b6e64068c3862cfcb1a97caac182126412"
+  },
+  {
+    "path": "reports/模型融合方案与性能对比报告.docx",
+    "bytes": 217555,
+    "sha256": "811539976d5cbd7a704b977d0932142ea34f18839c0b1280bf48c7066247d434"
+  },
+  {
+    "path": "reports/模拟AB测试方案与业务落地建议.docx",
+    "bytes": 92893,
+    "sha256": "0f2c305d642c6dfdd2999980699e088b400632e400189fea950a79c782699879"
+  },
+  {
+    "path": "reports/特征有效性评估报告.docx",
+    "bytes": 809229,
+    "sha256": "c3179a5d7c2f58b970bf2bebd0ab6656b58da2ec4ed0ab81601bd0f986b2d509"
+  },
+  {
+    "path": "reports/项目特征工程实施说明.docx",
+    "bytes": 56540,
+    "sha256": "06bc55d19b84ae306c29b18634709c9ea3aa3c5769f64a98611d29c6a2207a15"
+  },
+  {
+    "path": "presentations/抖音商城用户行为分析项目汇报.pptx",
+    "bytes": 286878,
+    "sha256": "4f4240a18f41078dca2e9aa146f0da5742275b4123869712fe226b97c7f58f35"
+  },
+  {
+    "path": "presentations/抖音商城购买概率建模技术分享.pptx",
+    "bytes": 211276,
+    "sha256": "f4836eea0da1809f79ac8c79b7d6386121690f6b941e81a76b15aee4b80f4ed0"
+  },
+  {
+    "path": "docs/特征拆分整理.xlsx",
+    "bytes": 17967,
+    "sha256": "db66777aa6f3b5381c65cf5583b0e44187139a786df9b41df95706bca9bc1d18"
+  },
+  {
+    "path": "dist/behavior_cleaning-1.1.0-py3-none-any.whl",
+    "git_included": false,
+    "bytes": 152021,
+    "sha256": "a84479d2a818a8cfdedb06f3beac9dab18c525c59df7a80b4684ffb0239a377b"
+  }
+]

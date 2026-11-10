@@ -4,3 +4,7 @@ __pycache__/
 .venv/
 outputs/
 .runtime/
+.model_runtime/
+artifacts/
+dist/
+build/
