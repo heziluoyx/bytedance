@@ -1,0 +1,26 @@
+{
+  "rows": 2000,
+  "models": [
+    "LogisticRegression",
+    "XGBoost",
+    "LightGBM",
+    "LSTM",
+    "GRU",
+    "DIN",
+    "DIN_MHA",
+    "Stacking"
+  ],
+  "future_data_present": false,
+  "maximum_absolute_probability_errors": {
+    "LogisticRegression": 0.0,
+    "XGBoost": 0.0,
+    "LightGBM": 0.0,
+    "LSTM": 0.0,
+    "GRU": 0.0,
+    "DIN": 0.0,
+    "DIN_MHA": 0.0,
+    "Stacking": 0.0
+  },
+  "bundle_reload_parity": true,
+  "status": "passed"
+}

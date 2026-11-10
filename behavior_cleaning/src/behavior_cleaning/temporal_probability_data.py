@@ -60,7 +60,12 @@ def open_events(source, temporary):
     return c
 
 
-def snapshot(c, cutoff, maximum, seed=42):
+def snapshot(c, cutoff, maximum, seed=42, *, labeled=True):
+    """构建三天历史快照；推理用labeled=False，完全不查询未来行为。
+
+    labeled=True保持既有实验标签与抽样规则；False允许只有历史的数据，
+    返回结果不含target，也不要求出现两类标签。
+    """
     start, cutoff, finish = window_bounds(cutoff)
     c.execute(
         "CREATE OR REPLACE TEMP TABLE history AS SELECT * FROM events WHERE event_time>=? AND event_time<?",
@@ -76,11 +81,17 @@ def snapshot(c, cutoff, maximum, seed=42):
         MAX(CASE WHEN behavior_type=4 THEN event_time END) last_buy
         FROM history GROUP BY user_id,item_id"""
     )
-    c.execute(
-        """CREATE OR REPLACE TEMP TABLE future AS SELECT user_id,item_id FROM events
+    if labeled:
+        c.execute(
+            """CREATE OR REPLACE TEMP TABLE future AS SELECT user_id,item_id FROM events
         WHERE event_time>=? AND event_time<? AND behavior_type=4 GROUP BY user_id,item_id""",
-        [cutoff, finish],
-    )
+            [cutoff, finish],
+        )
+    else:
+        c.execute(
+            "CREATE OR REPLACE TEMP TABLE future AS "
+            "SELECT user_id,item_id FROM history WHERE FALSE"
+        )
     pool = c.execute(
         "SELECT COUNT(*),COUNT(f.item_id) FROM pairs p LEFT JOIN future f USING(user_id,item_id)"
     ).fetchone()
@@ -121,8 +132,20 @@ def snapshot(c, cutoff, maximum, seed=42):
         "sample_pairs": len(frame),
         "positives": int(frame.target.sum()),
     }
-    if frame.target.nunique() != 2 or frame.duplicated(["user_id", "item_id"]).any():
+    if (labeled and frame.target.nunique() != 2) or frame.duplicated(
+        ["user_id", "item_id"]
+    ).any():
         raise ValueError("快照缺少两类标签或出现重复用户商品对")
+    if not labeled:
+        frame = frame.drop(columns="target")
+        for key in [
+            "candidate_positives",
+            "all_future_purchase_pairs",
+            "candidate_purchase_coverage",
+            "positives",
+        ]:
+            info.pop(key)
+        info["labeled"] = False
     return frame, info
 
 

@@ -1,5 +1,16 @@
 # bytedance
 
+## 1.1.0 完整项目交付
+
+现已封装清洗、特征、训练、批量概率推理与模型包导出，完整90项测试通过。
+
+- [完整项目总报告](behavior_cleaning/reports/抖音商城用户行为分析项目总报告.docx)：42页，含全部分析主题、历史与最新模型实验、融合解释及模拟业务结果。
+- [项目汇报PPT](behavior_cleaning/presentations/抖音商城用户行为分析项目汇报.pptx)与[技术分享PPT](behavior_cleaning/presentations/抖音商城购买概率建模技术分享.pptx)：分别18页和19页，配逐页讲解提纲。
+- [API文档与运行示例](behavior_cleaning/docs/api_reference.md)、[特征拆分Excel](behavior_cleaning/docs/特征拆分整理.xlsx)、[项目复盘](behavior_cleaning/docs/project_retrospective.md)。
+- [全部报告索引](behavior_cleaning/reports/README.md)、[聚合结果与调参清单](behavior_cleaning/reports/results/result_manifest.json)、[版本发布记录](behavior_cleaning/releases/v1.1.0.md)。
+
+安装稳定入口：`python -m pip install -e ./behavior_cleaning`（仓库根目录），建模环境见API文档；随后运行`behavior-toolkit --help`。预测使用真实0/1标签训练，主要输出连续概率。现有实验窗口固定，双十二影响、长尾局限与未实施真实A/B均在报告中说明。
+
 抖音商城用户行为数据清洗与 SQLite 数据工程项目。主要代码在 [behavior_cleaning](behavior_cleaning/)。
 
 ## 最新更新
@@ -59,7 +70,7 @@ python behavior_cleaning/scripts/build_database.py
 
 ## 验证
 
-当前完整测试 47 项通过，isort 与 Black 检查通过。
+当前完整测试 90 项通过，新增接口与示例已通过 isort 与 Black 检查。
 本地全量输入 12,256,906 行，新版隔离异常冗余 52,576 行，保留 12,204,330 行。
 SQLite 已完成同数量导入、四张基础表及六个索引，外键和 integrity_check 均通过。
 这些结果属于已有本地数据验证，原始数据和数据库不随代码上传。

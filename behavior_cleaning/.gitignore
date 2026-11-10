@@ -5,3 +5,6 @@ __pycache__/
 outputs/
 .runtime/
 .model_runtime/
+artifacts/
+dist/
+build/

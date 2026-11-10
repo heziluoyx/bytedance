@@ -1,0 +1,26 @@
+{
+  "calendar_region": "CN-mainland",
+  "calendar_year": 2025,
+  "calendar_days": 365,
+  "source_url": "https://www.forestry.gov.cn/c/www/szxx/594663.jhtml",
+  "original_url": "https://www.gov.cn/zhengce/content/202411/content_6986382.htm",
+  "document": "国办发明电〔2024〕12号",
+  "definition": "国务院全国统一放假调休区间（含连休），不将普通周末视为节假日",
+  "date_start": "2025-11-18",
+  "date_end": "2025-12-18",
+  "observed_days": 31,
+  "holiday_days": 0,
+  "nonholiday_days": 31,
+  "makeup_workdays": 0,
+  "workdays": 23,
+  "ordinary_weekend_days": 8,
+  "holiday_comparison_estimable": false,
+  "holiday_effect": null,
+  "status": "completed_no_holiday_observations",
+  "limitations": [
+    "使用记录中的本地日期，按中国大陆全国统一安排解释，未转换原始时区。",
+    "不覆盖港澳台或少数民族地方性假期，不推断个体实际是否休息。",
+    "无节假日样本时差异不可估计，不表示节假日没有影响。",
+    "购买为行为事件数，没有订单信息，不能称为订单数或销售额。"
+  ]
+}
