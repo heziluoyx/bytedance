@@ -1,0 +1,3 @@
+# Python 3.10; matches the existing CPU experiment environment.
+-r requirements-models.txt
+torch==1.12.1

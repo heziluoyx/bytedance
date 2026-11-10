@@ -59,7 +59,7 @@ python behavior_cleaning/scripts/build_database.py
 
 ## 验证
 
-当前完整测试 40 项通过，isort 与 Black 检查通过。
+当前完整测试 47 项通过，isort 与 Black 检查通过。
 本地全量输入 12,256,906 行，新版隔离异常冗余 52,576 行，保留 12,204,330 行。
 SQLite 已完成同数量导入、四张基础表及六个索引，外键和 integrity_check 均通过。
 这些结果属于已有本地数据验证，原始数据和数据库不随代码上传。
@@ -80,19 +80,29 @@ python behavior_cleaning/scripts/analyze_purchase_paths.py
 
 本地全量复核中，浏览、加购、收藏后的完整7天购买比例分别为1.07%、8.20%、3.30%。这些是行为关联，不是支付订单转化或营销因果提升；汇总依据随报告归档。
 
-## 传统机器学习与特征工程实施说明
+## 用户商品购买模型训练
 
-新增用户商品对未来7天购买预测，包含逻辑回归、XGBoost和LightGBM；对比不处理、SMOTE、欠采样和类别权重，按验证AUC选择方案并进行Optuna调参。较早开发采用分层7:2:1，冻结后分别报告较早留出与双十二跨期压力集。累计历史固定7天，验证和测试不重采样。
+新增用户—商品对未来7天标签、分层7:2:1样本、不平衡方案比较、Optuna调优以及LSTM、GRU、DIN、多头注意力扩展。
 
-在仓库根目录运行：
+运行入口：`python behavior_cleaning/scripts/train_purchase_models.py`（仓库根目录）。
+
+详细安装、分阶段运行和适用边界见 [模型训练说明](behavior_cleaning/docs/model_training.md)。训练结果保存在本地 `behavior_cleaning/outputs/purchase_models_...`，不上传用户样本和预测明细。
+
+## 模型融合与业务模拟
+
+运行 `python behavior_cleaning/scripts/analyze_stacking_business.py`，执行三折OOF融合、模型SHAP解释、错误诊断和用户级A/B模拟。详见 [融合与业务模拟说明](behavior_cleaning/docs/stacking_business.md)。报告包含实际离线结果和单列的假设收益情景，不将预测效果当作因果转化提升。
+
+## 双十二窗口复核
+
+新增较早截点的三种传统模型重训与跨期压力评估，入口为 `behavior_cleaning/scripts/review_promotion_models.py`。详见 [窗口选择与结果限制](behavior_cleaning/docs/promotion_review.md)。项目特征工程实施说明与相关报告已补充活动期适用范围。
+
+## 最新时间窗口购买概率与四份模型报告
+
+最新版本统一3天历史、未来7天购买标签，按时间分开训练、调参、融合校准和最终测试，输出连续购买概率。七种单模型与原时间留出Stacking保留，说明见 [时间窗口预测](behavior_cleaning/docs/temporal_probability.md)。
 
 ```powershell
-python -m pip install -r behavior_cleaning/requirements-models.txt
-python behavior_cleaning/scripts/review_promotion_models.py --output-dir behavior_cleaning/outputs/traditional_new_run
+python behavior_cleaning/scripts/train_temporal_probability.py --source "清洗后Parquet路径"
+python behavior_cleaning/scripts/analyze_probability_diagnostics.py
 ```
 
-需要先在本地准备 `behavior_cleaning/outputs/sql_analysis_v2/user_behavior.sqlite`，也可用 `--database` 指定路径。数据库、原始数据、用户样本、预测明细和权重不上传。
-
-设计、结果与边界见[传统模型说明](behavior_cleaning/docs/promotion_review.md)；[特征工程实施说明](behavior_cleaning/reports/项目特征工程实施说明.docx)已归档。本次代码仅包含传统模型，不依赖PyTorch。
-
-独立传统模型发布目录已通过50项自动化测试，并完成不加载PyTorch的小型模拟数据库端到端试运行。模拟数据仅用于功能验证。
+四份更新的Word报告见 [报告目录](behavior_cleaning/reports/README.md)，覆盖单模型、融合、SHAP解释与模拟A/B。补充诊断计算排序、Lift、PSI、融合对照和消融，详见 [运行说明与评估边界](behavior_cleaning/docs/probability_diagnostics.md)。早期随机划分实验保留作历史版本，不与最新时间窗口结果混为同一评估。

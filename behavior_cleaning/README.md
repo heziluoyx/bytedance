@@ -26,7 +26,7 @@ SQLite 排序临时目录放在项目 `outputs/sqlite_temp`，只影响当前进
 - 本次数据自适应候选阈值为大于 206 次/用户小时，仍需个人基线或重复强度证据。
 - 全量清洗隔离 52,576 条异常重复冗余，保留 12,204,330 条记录。
 - 新版 SQLite 保留全部 12,204,330 条记录，完成四表、六索引及完整性核验。
-- 当前完整测试 40 项通过，导入排序及 Black 格式检查通过。
+- 当前完整测试 47 项通过，导入排序及 Black 格式检查通过。
 - 已补充基础业务 SQL 分析、历史特征及中国大陆日历分析。
 - 原始 CSV、Parquet、数据库、清洗输出和本地依赖不在仓库中。
 
@@ -155,19 +155,26 @@ python behavior_cleaning/scripts/analyze_purchase_paths.py
 
 上面的命令在仓库根目录运行。脚本只读访问数据库，输出新的JSON、CSV和SUCCESS。SQL见 `sql/04_purchase_paths.sql`，详细口径与已核验结果见 [购买路径复核](docs/purchase_path_analysis.md)。完整7天购买比例为浏览1.07%、加购8.20%、收藏3.30%，各起点人群可重叠，不能相加或解释为因果提升。测试新增小时顺序、168小时边界及输出保护的3项验证。
 
-## 传统机器学习与特征工程实施说明
+## 用户商品购买模型训练
 
-新增用户商品对未来7天购买预测，包含逻辑回归、XGBoost和LightGBM；对比不处理、SMOTE、欠采样和类别权重，按验证AUC选择方案并进行Optuna调参。较早开发采用分层7:2:1，冻结后分别报告较早留出与双十二跨期压力集。累计历史固定7天，验证和测试不重采样。
+新增用户—商品对未来7天标签、分层7:2:1样本、不平衡方案比较、Optuna调优以及LSTM、GRU、DIN、多头注意力扩展。
 
-在仓库根目录运行：
+运行入口：`python behavior_cleaning/scripts/train_purchase_models.py`（仓库根目录）。
 
-```powershell
-python -m pip install -r behavior_cleaning/requirements-models.txt
-python behavior_cleaning/scripts/review_promotion_models.py --output-dir behavior_cleaning/outputs/traditional_new_run
-```
+详细安装、分阶段运行和适用边界见 [模型训练说明](docs/model_training.md)。训练结果保存在本地 `behavior_cleaning/outputs/purchase_models_...`，不上传用户样本和预测明细。
 
-需要先在本地准备 `behavior_cleaning/outputs/sql_analysis_v2/user_behavior.sqlite`，也可用 `--database` 指定路径。数据库、原始数据、用户样本、预测明细和权重不上传。
+## 模型融合与业务模拟
 
-设计、结果与边界见[传统模型说明](docs/promotion_review.md)；[特征工程实施说明](reports/项目特征工程实施说明.docx)已归档。本次代码仅包含传统模型，不依赖PyTorch。
+运行 `python behavior_cleaning/scripts/analyze_stacking_business.py`（仓库根目录），执行三折OOF融合、逻辑回归系数、XGBoost与DIN的SHAP解释、错误诊断和用户级A/B模拟。详见 [融合与业务模拟说明](docs/stacking_business.md)。本轮融合未超过树模型测试AUC；业务金额为假设情景，并非真实实验收益。项目现有60项测试通过。
 
-独立传统模型发布目录已通过50项自动化测试，并完成不加载PyTorch的小型模拟数据库端到端试运行。模拟数据仅用于功能验证。
+## 双十二窗口复核
+
+新增 `python behavior_cleaning/scripts/review_promotion_models.py`，在11月25日较早截点重新调优三种传统模型，冻结后评估12月12日跨期压力样本。两期特征统一固定7天；较早7:2:1留出与后期压力评估分别报告，不把促销期成绩当作常态结论。详见 [重训设计与限制](docs/promotion_review.md)。
+
+## 严格时间窗口的连续购买概率
+
+最新入口为 python behavior_cleaning/scripts/train_temporal_probability.py（仓库根目录）。本轮对七种单模型和时间留出Stacking重新训练，输出用户商品对未来7天购买的0到1连续概率，统一3天历史，按四个不重叠7天标签窗口隔离训练、调参、融合校准和最终测试。说明见 [时间概率预测](docs/temporal_probability.md)。
+
+默认结果为 outputs/temporal_probability_20261109，包含模型、概率校准器、连续概率CSV/Parquet、三份HTML/Markdown报告及解释图表。原实验保留。自然分布漂移、促销影响和源清洗回看限制在新报告中单独说明，不把购买倾向当营销增量。
+
+四份最新Word模型报告已归档在 [reports](reports/README.md)。补充诊断入口为 `python behavior_cleaning/scripts/analyze_probability_diagnostics.py`（仓库根目录），生成用户内排序、十分位Lift、PSI、融合与消融、SHAP依赖及精确交互等结果，见 [诊断说明](docs/probability_diagnostics.md)。
